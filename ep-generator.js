@@ -253,10 +253,20 @@ function getRandomImage(array, path) {
 	return path + array[Math.floor(Math.random() * array.length)];
 }
 
+var bgEnabled = true;
+
+function toggleBG() {
+	if (bgEnabled == true) {
+		bgEnabled = false;
+	} else {
+		bgEnabled = true;
+	}
+}
+
 function updateCanvas(caller) {
-	bgctx.clearRect(0, 0, bgcanvas.width, bgcanvas.height);
-	txtctx.clearRect(0, 0, bgcanvas.width, bgcanvas.height);
-	credctx.clearRect(0, 0, bgcanvas.width, bgcanvas.height);
+	bgctx.clearRect(0, 0, 1280, 720);
+	txtctx.clearRect(0, 0, 1280, 720);
+	credctx.clearRect(0, 0, 1280, 720);
 	var backgroundImage = new Image();
 	mask = new Image();
 	mask.src = (userMask.src == "") ? getRandomImage(maskArray, "assets/overlays/") : userMask.src;
@@ -268,7 +278,11 @@ function updateCanvas(caller) {
 		mask.src = getRandomImage(maskArray, "assets/overlays/");
 	}
 	if(backgroundImage.complete) {
-		bgctx.drawImage(backgroundImage, 0, 0, bgcanvas.width, bgcanvas.height);
+		if(bgEnabled) {
+			bgctx.drawImage(backgroundImage, 0, 0, 1280, 720);
+		} else {
+			bgctx.clearRect(0, 0, 1280, 720);
+		}
 		if(mask.complete) {
 			updateCanvasText();
 		} else {
@@ -281,7 +295,11 @@ function updateCanvas(caller) {
 		bgctx.drawImage(txtcanvas, 0, 0);
 	} else {
 		backgroundImage.onload = function() {
-			bgctx.drawImage(backgroundImage, 0, 0, bgcanvas.width, bgcanvas.height);
+		if(bgEnabled) {
+			bgctx.drawImage(backgroundImage, 0, 0, 1280, 720);
+		} else {
+			bgctx.clearRect(0, 0, 1280, 720);
+		}
 			if(mask.complete) {
 				updateCanvasText();
 			} else {
